@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="0" android:padding="1dp" android:layout_width="-1" android:layout_height="-2"
+    <LinearLayout android:orientation="0" android:background="#112c9ee0" android:paddingRight="20dp" android:layout_width="-2" android:layout_height="-1" android:layout_weight="1.0">
+        <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="24dp" android:textStyle="1" android:textColor="#7ca9b9" android:gravity="11" android:id="0x7f0d027e" android:layout_width="40dp" android:layout_height="-1" android:text="10" />
+        <LinearLayout android:orientation="1" android:layout_width="0dp" android:layout_height="-2" android:layout_weight="1.0">
+            <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="18dp" android:textStyle="1" android:textColor="#ffffff" android:id="0x7f0d027f" android:padding="2dp" android:layout_width="-2" android:layout_height="-2" android:layout_marginLeft="10dp" android:text="80 NetCoins" />
+            <LinearLayout android:orientation="0" android:layout_width="-1" android:layout_height="-2">
+                <TextView android:textSize="11dp" android:textStyle="1" android:textColor="#cbcbcb" android:id="0x7f0d0280" android:layout_width="-2" android:layout_height="-2" android:layout_marginLeft="10dp" android:layout_marginBottom="2dp" android:text="+20 Bonus" />
+                <TextView android:textAppearance="?unknown_attr_ref: 1010042" android:textSize="11dp" android:textColor="#bebebe" android:gravity="10" android:id="0x7f0d0281" android:layout_width="-2" android:layout_height="-2" android:layout_marginLeft="5dp" android:text="Score: 19756" />
+                <TextView android:textAppearance="?unknown_attr_ref: 1010042" android:textSize="11dp" android:textColor="#bebebe" android:gravity="10" android:id="0x7f0d0282" android:layout_width="-2" android:layout_height="-2" android:layout_marginLeft="5dp" android:text="Rep.: 19839" />
+            </LinearLayout>
+        </LinearLayout>
+        <ImageView android:layout_gravity="11" android:id="0x7f0d0283" android:layout_width="30dp" android:layout_height="30dp" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:background="0x7f02005b" android:layout_width="-1" android:layout_height="-1">
+    <LinearLayout android:orientation="1" android:background="#99000000" android:layout_width="-1" android:layout_height="-1" android:layout_alignParentLeft="true" android:layout_alignParentTop="true"
+        <LinearLayout android:orientation="1" android:background="#273f48" android:layout_width="-1" android:layout_height="26dp" android:layout_marginTop="5dp" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
+            <LinearLayout android:orientation="0" android:background="#141414" android:layout_width="-1" android:layout_height="24dp" android:layout_marginTop="1dp" android:layout_marginBottom="1dp">
+                <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textStyle="1" android:textColor="#cbcbcb" android:gravity="10" android:id="0x7f0d009e" android:layout_width="-2" android:layout_height="24dp" android:layout_marginLeft="10dp" android:text="Packages" android:layout_toRightOf="0x7f0d0091" android:layout_alignParentBottom="true" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout android:orientation="1" android:background="#273f48" android:layout_width="-1" android:layout_height="30dp" android:layout_marginTop="5dp" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
+            <LinearLayout android:orientation="0" android:background="0x7f020100" android:layout_width="-1" android:layout_height="28dp" android:layout_marginTop="1dp" android:layout_marginBottom="1dp"
+                <LinearLayout android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="1.0">
+                    <ImageView android:id="0x7f0d009f" android:background="0x7f0200d8" android:layout_width="26dp" android:layout_height="26dp" android:layout_marginLeft="10dp" />
+                    <TextView android:textAppearance="?unknown_attr_ref: 1010042" android:textColor="#ffffff" android:gravity="10" android:id="0x7f0d00a0" android:layout_width="-2" android:layout_height="-1" android:layout_marginLeft="10dp" />
+                </LinearLayout>
+                <LinearLayout android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="1.0">
+                    <ImageView android:id="0x7f0d00a1" android:background="0x7f020073" android:layout_width="26dp" android:layout_height="26dp" android:layout_marginLeft="10dp" />
+                    <TextView android:textAppearance="?unknown_attr_ref: 1010042" android:textColor="#ffffff" android:gravity="10" android:id="0x7f0d00a2" android:layout_width="-2" android:layout_height="-1" android:layout_marginLeft="10dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout android:layout_gravity="1" android:orientation="0" android:background="#88000000" android:layout_width="-1" android:layout_height="140dp" android:layout_marginTop="10dp"
+            <LinearLayout android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="1.0" />
+            <LinearLayout android:gravity="11" android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="1.0"
+                <LinearLayout android:gravity="1" android:orientation="1" android:layout_width="-2" android:layout_height="-2">
+                    <ImageView android:id="0x7f0d00a3" android:background="0x7f020067" android:layout_width="-2" android:layout_height="-2" />
+                    <TextView android:textAppearance="?unknown_attr_ref: 1010042" android:textSize="12dp" android:textColor="#ffffff" android:id="0x7f0d00a4" android:layout_width="-2" android:layout_height="-2" android:layout_marginTop="5dp" android:text="Bonus Packages" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout android:gravity="11" android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="1.0">
+                <TextView android:textAppearance="?unknown_attr_ref: 1010040" android:textSize="48dp" android:textStyle="1" android:textColor="#7ca9b9" android:id="0x7f0d00a5" android:layout_width="-2" android:layout_height="-2" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout android:layout_gravity="1" android:orientation="0" android:background="#607882" android:layout_width="-1" android:layout_height="-2" android:layout_marginTop="5dp">
+            <Button android:textSize="12dp" android:textStyle="1" android:textColor="#ffffff" android:gravity="11" android:id="0x7f0d00a6" android:background="0x7f020100" android:layout_width="0dp" android:layout_height="50dp" android:text="Open" android:layout_weight="0.6" />
+            <Button android:textSize="12dp" android:textStyle="1" android:textColor="#ffffff" android:gravity="15" android:id="0x7f0d00a7" android:background="0x7f020100" android:layout_width="0dp" android:layout_height="50dp" android:layout_marginLeft="1dp" android:text="Open for 200" android:layout_weight="0.4" />
+            <LinearLayout android:orientation="0" android:background="0x7f020100" android:layout_width="60dp" android:layout_height="-1" android:layout_marginRight="-1dp">
+                <ImageView android:layout_gravity="10" android:id="0x7f0d00a8" android:background="0x7f020073" android:layout_width="22dp" android:layout_height="22dp" android:layout_marginLeft="5dp" />
+            </LinearLayout>
+        </LinearLayout>
+        <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="10dp" android:textStyle="1" android:textColor="#ffffff" android:layout_gravity="1" android:id="0x7f0d00a9" android:layout_width="-2" android:layout_height="-2" android:layout_marginTop="10dp" android:text="Possible content: Money, NetCoins, Upgrades, Botnet PCs!" />
+        <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="14dp" android:textStyle="1" android:textColor="#7ca9b9" android:layout_gravity="1" android:id="0x7f0d00aa" android:layout_width="-2" android:layout_height="-2" android:layout_marginTop="10dp" android:text="Rewards cant be stolen!" />
+    </LinearLayout>
+    <RelativeLayout android:id="0x7f0d00ab" android:visibility="2" android:layout_width="200dp" android:layout_height="200dp" android:layout_centerInParent="true" style="0x7f0a00be">
+        <ProgressBar style="0x7f0a00bf" />
+    </RelativeLayout>
+    <RelativeLayout android:id="0x7f0d00ac" android:visibility="2" android:clickable="true" android:layout_width="-1" android:layout_height="300dp" android:layout_centerInParent="true">
+        <LinearLayout android:orientation="1" android:background="#bb000000" android:layout_width="-1" android:layout_height="-2" android:layout_marginLeft="20dp" android:layout_marginRight="20dp" android:layout_alignParentLeft="true" android:layout_alignParentTop="true"
+            <LinearLayout android:orientation="0" android:background="0x7f020100" android:layout_width="-1" android:layout_height="30dp" android:layout_marginLeft="1dp" android:layout_marginTop="1dp" android:layout_marginRight="1dp">
+                <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="14dp" android:textStyle="1" android:textColor="#ffffff" android:gravity="11" android:id="0x7f0d00ad" android:layout_width="-1" android:layout_height="-1" android:text="Congratulations" />
+            </LinearLayout>
+            <LinearLayout android:orientation="1" android:background="#aa000000" android:layout_width="-1" android:layout_height="-2" android:layout_marginLeft="1dp" android:layout_marginRight="1dp" android:layout_marginBottom="1dp"
+                <LinearLayout android:layout_gravity="1" android:orientation="1" android:layout_width="-1" android:layout_height="60dp" android:layout_marginTop="20dp">
+                    <ImageView android:layout_gravity="1" android:id="0x7f0d00ae" android:layout_width="60dp" android:layout_height="60dp" android:scaleType="3" />
+                </LinearLayout>
+                <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textColor="#ffffff" android:layout_gravity="1" android:id="0x7f0d00af" android:layout_width="-2" android:layout_height="-2" android:text="NetCoins" />
+                <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="16dp" android:textStyle="1" android:textColor="#7ca9b9" android:layout_gravity="1" android:id="0x7f0d00b0" android:layout_width="-2" android:layout_height="-2" android:text="+300" />
+                <Button android:textStyle="1" android:textColor="#ffffff" android:layout_gravity="1" android:id="0x7f0d00b1" android:background="0x7f020100" android:layout_width="-1" android:layout_height="50dp" android:layout_marginTop="20dp" android:text="close" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

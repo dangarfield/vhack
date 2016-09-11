@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:background="0x7f020000" android:paddingLeft="0x7f09001a" android:paddingTop="0x7f09004d" android:paddingRight="0x7f09001a" android:paddingBottom="0x7f09004d" android:layout_width="-1" android:layout_height="-1">
+    <ScrollView android:id="0x7f0d022f" android:layout_width="-1" android:layout_height="-1" android:layout_alignParentLeft="true" android:layout_alignParentTop="true" android:layout_alignParentStart="true">
+        <TextView android:textAppearance="?unknown_attr_ref: 1010042" android:textColor="#ffffff" android:id="0x7f0d0230" android:layout_width="-2" android:layout_height="-2" />
+    </ScrollView>
+</RelativeLayout>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:background="0x7f02005b" android:layout_width="-1" android:layout_height="-1">
+    <LinearLayout android:orientation="1" android:background="#99000000" android:layout_width="-1" android:layout_height="-1"
+        <LinearLayout android:layout_gravity="1" android:orientation="1" android:background="#273f48" android:layout_width="-1" android:layout_height="-2" android:layout_marginTop="5dp" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
+            <LinearLayout android:orientation="0" android:background="#141414" android:layout_width="-1" android:layout_height="24dp" android:layout_marginTop="1dp" android:layout_marginBottom="1dp">
+                <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textStyle="1" android:textColor="#cbcbcb" android:gravity="10" android:id="0x7f0d0146" android:layout_width="-2" android:layout_height="24dp" android:layout_marginLeft="10dp" android:text="Events" android:layout_alignParentBottom="true" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout android:orientation="1" android:id="0x7f0d0147" android:background="#141414" android:visibility="2" android:layout_width="-1" android:layout_height="-2" android:layout_marginTop="5dp"
+            <LinearLayout android:orientation="0" android:background="0x7f020100" android:layout_width="-1" android:layout_height="30dp">
+                <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="14dp" android:textStyle="1" android:textColor="#11bb11" android:gravity="10" android:id="0x7f0d0148" android:layout_width="-2" android:layout_height="-1" android:layout_marginLeft="10dp" android:text="Running" />
+                <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="14dp" android:textStyle="1" android:textColor="#cbcbcb" android:gravity="10" android:id="0x7f0d0149" android:layout_width="-1" android:layout_height="-1" android:layout_marginLeft="30dp" android:text="Event #1: Spam x4!" />
+            </LinearLayout>
+            <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textColor="#ffffff" android:id="0x7f0d014a" android:layout_width="-2" android:layout_height="-2" android:layout_marginLeft="20dp" android:layout_marginTop="10dp" android:layout_marginRight="20dp" android:layout_marginBottom="10dp" android:text="You will get Spam Level * 4$ per hour. 
+
+test" />
+        </LinearLayout>
+        <LinearLayout android:orientation="1" android:id="0x7f0d014b" android:background="#141414" android:visibility="2" android:layout_width="-1" android:layout_height="-2" android:layout_marginTop="5dp"
+            <LinearLayout android:orientation="0" android:background="0x7f020100" android:layout_width="-1" android:layout_height="30dp">
+                <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="14dp" android:textStyle="1" android:textColor="#11bb11" android:gravity="10" android:id="0x7f0d014c" android:layout_width="-2" android:layout_height="-1" android:layout_marginLeft="10dp" android:text="Running" />
+                <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="14dp" android:textStyle="1" android:textColor="#cbcbcb" android:gravity="10" android:id="0x7f0d014d" android:layout_width="-1" android:layout_height="-1" android:layout_marginLeft="30dp" android:text="Event #1: Spam x4!" />
+            </LinearLayout>
+            <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textColor="#ffffff" android:id="0x7f0d014e" android:layout_width="-2" android:layout_height="-2" android:layout_marginLeft="20dp" android:layout_marginTop="10dp" android:layout_marginRight="20dp" android:layout_marginBottom="10dp" android:text="You will get Spam Level * 4$ per hour. 
+
+test" />
+        </LinearLayout>
+        <LinearLayout android:orientation="1" android:id="0x7f0d014f" android:background="#141414" android:visibility="2" android:layout_width="-1" android:layout_height="-2" android:layout_marginTop="5dp"
+            <LinearLayout android:orientation="0" android:background="0x7f020100" android:layout_width="-1" android:layout_height="30dp">
+                <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="14dp" android:textStyle="1" android:textColor="#11bb11" android:gravity="10" android:id="0x7f0d0150" android:layout_width="-2" android:layout_height="-1" android:layout_marginLeft="10dp" android:text="Running" />
+                <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="14dp" android:textStyle="1" android:textColor="#cbcbcb" android:gravity="10" android:id="0x7f0d0151" android:layout_width="-1" android:layout_height="-1" android:layout_marginLeft="30dp" android:text="Event #1: Spam x4!" />
+            </LinearLayout>
+            <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textColor="#ffffff" android:id="0x7f0d0152" android:layout_width="-2" android:layout_height="-2" android:layout_marginLeft="20dp" android:layout_marginTop="10dp" android:layout_marginRight="20dp" android:layout_marginBottom="10dp" android:text="You will get Spam Level * 4$ per hour. 
+
+test" />
+        </LinearLayout>
+    </LinearLayout>
+    <RelativeLayout android:id="0x7f0d0153" android:visibility="2" android:layout_width="200dp" android:layout_height="200dp" android:layout_centerInParent="true" style="0x7f0a00be">
+        <ProgressBar style="0x7f0a00bf" />
+    </RelativeLayout>
+    <RelativeLayout android:id="0x7f0d0154" android:visibility="2" android:layout_width="-1" android:layout_height="-1" android:layout_alignParentLeft="true" android:layout_alignParentBottom="true" android:layout_alignParentStart="true">
+        <TextView android:textAppearance="?unknown_attr_ref: 1010040" android:textStyle="1" android:textColor="#ffffff" android:id="0x7f0d0155" android:layout_width="-2" android:layout_height="-2" android:text="No running Events" android:layout_centerHorizontal="true" android:layout_centerVertical="true" />
+    </RelativeLayout>
+</RelativeLayout>

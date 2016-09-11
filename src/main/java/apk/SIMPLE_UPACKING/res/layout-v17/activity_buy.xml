@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:background="0x7f02005b" android:visibility="0" android:layout_width="-1" android:layout_height="-1">
+    <LinearLayout android:orientation="1" android:id="0x7f0d00df" android:background="#99000000" android:layout_width="-1" android:layout_height="-1" android:layout_above="0x7f0d00e0"
+        <LinearLayout android:orientation="1" android:background="#273f48" android:layout_width="-1" android:layout_height="-2" android:layout_marginTop="5dp" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
+            <LinearLayout android:orientation="0" android:background="#141414" android:layout_width="-1" android:layout_height="24dp" android:layout_marginTop="1dp" android:layout_marginBottom="1dp">
+                <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textStyle="1" android:textColor="#cbcbcb" android:gravity="10" android:id="0x7f0d00e1" android:layout_width="-2" android:layout_height="24dp" android:layout_marginLeft="10dp" android:text="Premium Shop" android:layout_toRightOf="0x7f0d0091" android:layout_alignParentBottom="true" android:layout_toEndOf="0x7f0d0091" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout android:orientation="1" android:background="#273f48" android:layout_width="-1" android:layout_height="60dp" android:layout_marginTop="5dp" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
+            <LinearLayout android:gravity="11" android:orientation="0" android:background="0x7f020100" android:layout_width="-1" android:layout_height="-1" android:layout_marginTop="1dp" android:layout_marginBottom="1dp"
+                <LinearLayout android:orientation="0" android:background="#273f48" android:padding="1dp" android:layout_width="-2" android:layout_height="-2">
+                    <Button android:textColor="#ffffff" android:id="0x7f0d00e2" android:background="0x7f020100" android:layout_width="200dp" android:layout_height="40dp" android:text="0x7f0700a4" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout android:orientation="1" android:background="0x7f020100" android:layout_width="-1" android:layout_height="30dp" android:layout_marginTop="5dp" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
+            <LinearLayout android:orientation="0" android:layout_width="-1" android:layout_height="24dp" android:layout_marginTop="1dp" android:layout_marginBottom="1dp">
+                <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textStyle="1" android:textColor="#cbcbcb" android:gravity="10" android:id="0x7f0d00e3" android:layout_width="-2" android:layout_height="24dp" android:layout_marginLeft="10dp" android:text="Premium Packets" android:layout_toRightOf="0x7f0d0091" android:layout_alignParentBottom="true" android:layout_toEndOf="0x7f0d0091" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout android:layout_gravity="10" android:orientation="0" android:layout_width="-1" android:layout_height="0dp" android:layout_weight="1.0">
+            <ListView android:id="0x7f0d00e4" android:layout_width="0dp" android:layout_height="-2" android:layout_weight="1.0" />
+            <ListView android:id="0x7f0d00e5" android:layout_width="0dp" android:layout_height="-2" android:layout_marginLeft="1dp" android:layout_weight="1.0" />
+        </LinearLayout>
+    </LinearLayout>
+    <RelativeLayout android:id="0x7f0d00e0" android:background="#99000000" android:layout_width="-1" android:layout_height="40dp" android:layout_alignParentLeft="true" android:layout_alignParentBottom="true" android:layout_alignParentStart="false">
+        <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="16dp" android:textStyle="1" android:textColor="#ffffff" android:gravity="1" android:id="0x7f0d00e6" android:layout_width="-1" android:layout_height="-2" android:layout_marginBottom="10dp" android:text="0x7f070063" android:layout_alignParentLeft="true" android:layout_alignParentBottom="true" android:layout_alignParentStart="true" />
+    </RelativeLayout>
+</RelativeLayout>

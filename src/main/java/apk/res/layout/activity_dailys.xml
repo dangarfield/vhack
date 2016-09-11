@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:background="0x7f02005b" android:layout_width="-1" android:layout_height="-1">
+    <LinearLayout android:orientation="1" android:background="#99000000" android:layout_width="-1" android:layout_height="-1" android:layout_alignParentLeft="true" android:layout_alignParentTop="true"
+        <LinearLayout android:layout_gravity="1" android:orientation="1" android:background="#273f48" android:layout_width="-1" android:layout_height="-2" android:layout_marginTop="5dp" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
+            <LinearLayout android:orientation="0" android:background="#141414" android:layout_width="-1" android:layout_height="24dp" android:layout_marginTop="1dp" android:layout_marginBottom="1dp">
+                <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textStyle="1" android:textColor="#cbcbcb" android:gravity="10" android:id="0x7f0d0129" android:layout_width="-2" android:layout_height="24dp" android:layout_marginLeft="10dp" android:text="0x7f0700eb" android:layout_alignParentBottom="true" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout android:layout_gravity="1" android:orientation="1" android:background="#273f48" android:layout_width="-1" android:layout_height="-2" android:layout_marginTop="5dp" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
+            <LinearLayout android:orientation="0" android:background="0x7f020100" android:layout_width="-1" android:layout_height="28dp" android:layout_marginTop="1dp" android:layout_marginBottom="1dp">
+                <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="14dp" android:textStyle="1" android:textColor="#ffffff" android:gravity="11" android:layout_gravity="1" android:id="0x7f0d012a" android:layout_width="-1" android:layout_height="-1" android:text="Daily missions" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout android:layout_gravity="1" android:orientation="0" android:layout_width="-1" android:layout_height="-2" android:layout_marginTop="1dp" android:layout_marginBottom="1dp"
+            <LinearLayout android:orientation="1" android:background="#dd141414" android:layout_width="-1" android:layout_height="-2" android:layout_margin="10dp"
+                <LinearLayout android:layout_gravity="1" android:orientation="0" android:layout_width="-1" android:layout_height="30dp"
+                    <LinearLayout android:gravity="1" android:orientation="0" android:background="0x7f020100" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="0.9">
+                        <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textStyle="1" android:textColor="#ffffff" android:gravity="10" android:id="0x7f0d012b" android:layout_width="-2" android:layout_height="-1" android:text="Mission" />
+                    </LinearLayout>
+                    <LinearLayout android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="0.7">
+                        <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textStyle="1" android:textColor="#ffffff" android:gravity="11" android:id="0x7f0d012c" android:background="0x7f020100" android:layout_width="-1" android:layout_height="-1" android:text="Reward" />
+                    </LinearLayout>
+                    <LinearLayout android:gravity="1" android:orientation="0" android:background="0x7f020100" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="0.6">
+                        <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textStyle="1" android:textColor="#ffffff" android:gravity="11" android:id="0x7f0d012d" android:layout_width="-2" android:layout_height="-1" android:text="Progress" />
+                    </LinearLayout>
+                    <LinearLayout android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="0.4">
+                        <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textStyle="1" android:textColor="#ffffff" android:gravity="11" android:id="0x7f0d012e" android:background="0x7f020100" android:layout_width="-1" android:layout_height="-1" android:text="Done" android:layout_weight="0.4" />
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout android:orientation="0" android:layout_width="-1" android:layout_height="-2" android:layout_margin="5dp"
+                    <LinearLayout android:gravity="1" android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="0.9">
+                        <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textStyle="1" android:textColor="#cbcbcb" android:gravity="10" android:id="0x7f0d012f" android:layout_width="-2" android:layout_height="-1" android:text="Login" />
+                    </LinearLayout>
+                    <LinearLayout android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="0.7">
+                        <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textStyle="1" android:textColor="#5ccbf4" android:gravity="11" android:id="0x7f0d0130" android:layout_width="-1" android:layout_height="-1" android:text="Bonus Pack." />
+                    </LinearLayout>
+                    <LinearLayout android:gravity="1" android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="0.6">
+                        <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textStyle="1" android:textColor="#ffffff" android:gravity="10" android:id="0x7f0d0131" android:layout_width="-2" android:layout_height="-1" android:text="0/0" />
+                    </LinearLayout>
+                    <LinearLayout android:gravity="11" android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="0.4">
+                        <CheckBox android:id="0x7f0d0132" android:clickable="false" android:layout_width="-2" android:layout_height="-2" />
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout android:orientation="0" android:layout_width="-1" android:layout_height="-2" android:layout_margin="5dp"
+                    <LinearLayout android:gravity="1" android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="0.9">
+                        <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textStyle="1" android:textColor="#cbcbcb" android:gravity="10" android:id="0x7f0d0133" android:layout_width="-2" android:layout_height="-1" android:text="Scan x10" />
+                    </LinearLayout>
+                    <LinearLayout android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="0.7">
+                        <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textStyle="1" android:textColor="#5ccbf4" android:gravity="11" android:id="0x7f0d0134" android:layout_width="-1" android:layout_height="-1" android:text="$80.000" />
+                    </LinearLayout>
+                    <LinearLayout android:gravity="1" android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="0.6">
+                        <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textStyle="1" android:textColor="#ffffff" android:gravity="10" android:id="0x7f0d0135" android:layout_width="-2" android:layout_height="-1" android:text="0/0" />
+                    </LinearLayout>
+                    <LinearLayout android:gravity="11" android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="0.4">
+                        <CheckBox android:enabled="true" android:id="0x7f0d0136" android:clickable="false" android:layout_width="-2" android:layout_height="-2" />
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout android:layout_gravity="1" android:orientation="0" android:layout_width="-1" android:layout_height="-2" android:layout_margin="5dp"
+                    <LinearLayout android:gravity="1" android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="0.9">
+                        <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textStyle="1" android:textColor="#cbcbcb" android:gravity="10" android:id="0x7f0d0137" android:layout_width="-2" android:layout_height="-1" android:text="Scan x50" />
+                    </LinearLayout>
+                    <LinearLayout android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="0.7">
+                        <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textStyle="1" android:textColor="#5ccbf4" android:gravity="11" android:id="0x7f0d0138" android:layout_width="-1" android:layout_height="-1" android:text="$400.000" />
+                    </LinearLayout>
+                    <LinearLayout android:gravity="1" android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="0.6">
+                        <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textStyle="1" android:textColor="#ffffff" android:gravity="10" android:id="0x7f0d0139" android:layout_width="-2" android:layout_height="-1" android:text="0/0" />
+                    </LinearLayout>
+                    <LinearLayout android:gravity="11" android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="0.4">
+                        <CheckBox android:id="0x7f0d013a" android:clickable="false" android:layout_width="-2" android:layout_height="-2" />
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout android:layout_gravity="1" android:orientation="0" android:layout_width="-1" android:layout_height="-2" android:layout_margin="5dp"
+                    <LinearLayout android:gravity="1" android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="0.9">
+                        <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textStyle="1" android:textColor="#cbcbcb" android:gravity="10" android:id="0x7f0d013b" android:layout_width="-2" android:layout_height="-1" android:text="Transfer x10" />
+                    </LinearLayout>
+                    <LinearLayout android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="0.7">
+                        <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textStyle="1" android:textColor="#5ccbf4" android:gravity="11" android:id="0x7f0d013c" android:layout_width="-1" android:layout_height="-1" android:text="$120.000" />
+                    </LinearLayout>
+                    <LinearLayout android:gravity="1" android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="0.6">
+                        <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textStyle="1" android:textColor="#ffffff" android:gravity="10" android:id="0x7f0d013d" android:layout_width="-2" android:layout_height="-1" android:text="0/0" />
+                    </LinearLayout>
+                    <LinearLayout android:gravity="11" android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="0.4">
+                        <CheckBox android:id="0x7f0d013e" android:clickable="false" android:layout_width="-2" android:layout_height="-2" />
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout android:layout_gravity="1" android:orientation="0" android:layout_width="-1" android:layout_height="-2" android:layout_margin="5dp"
+                    <LinearLayout android:gravity="1" android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="0.9">
+                        <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textStyle="1" android:textColor="#cbcbcb" android:gravity="10" android:id="0x7f0d013f" android:layout_width="-2" android:layout_height="-1" android:text="Transfer x50" />
+                    </LinearLayout>
+                    <LinearLayout android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="0.7">
+                        <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textStyle="1" android:textColor="#5ccbf4" android:gravity="11" android:id="0x7f0d0140" android:layout_width="-1" android:layout_height="-1" android:text="$640.000" />
+                    </LinearLayout>
+                    <LinearLayout android:gravity="1" android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="0.6">
+                        <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textStyle="1" android:textColor="#ffffff" android:gravity="10" android:id="0x7f0d0141" android:layout_width="-2" android:layout_height="-1" android:text="0/0" />
+                    </LinearLayout>
+                    <LinearLayout android:gravity="11" android:orientation="0" android:layout_width="0dp" android:layout_height="-1" android:layout_weight="0.4">
+                        <CheckBox android:id="0x7f0d0142" android:clickable="false" android:layout_width="-2" android:layout_height="-2" />
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout android:layout_gravity="1" android:orientation="0" android:layout_width="-1" android:layout_height="50dp">
+                    <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textColor="#5ccbf4" android:gravity="11" android:id="0x7f0d0143" android:layout_width="-1" android:layout_height="-1" android:text="Rewards can't be stolen." />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <TextView android:textAppearance="?unknown_attr_ref: 1010041" android:textSize="12dp" android:textColor="#ffffff" android:gravity="11" android:layout_gravity="1" android:id="0x7f0d0144" android:layout_width="-2" android:layout_height="-2" android:layout_marginTop="10dp" />
+    </LinearLayout>
+    <RelativeLayout android:id="0x7f0d0145" android:visibility="2" android:layout_width="200dp" android:layout_height="200dp" android:layout_centerInParent="true" style="0x7f0a00be">
+        <ProgressBar style="0x7f0a00bf" />
+    </RelativeLayout>
+</RelativeLayout>
