@@ -14,7 +14,7 @@ public class TaskData {
 	private String ipsp;
 	private String money;
 	private String netcoins;
-	private String ram;
+	private int ram;
 	private String scan;
 	private String sdk;
 	private String spam;
@@ -106,11 +106,11 @@ public class TaskData {
 		this.netcoins = netcoins;
 	}
 
-	public String getRam() {
+	public int getRam() {
 		return ram;
 	}
 
-	public void setRam(String ram) {
+	public void setRam(int ram) {
 		this.ram = ram;
 	}
 

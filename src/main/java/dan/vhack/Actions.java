@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mashape.unirest.http.ObjectMapper;
 import com.mashape.unirest.http.Unirest;
 
+@SuppressWarnings("deprecation")
 public class Actions {
 
 	public static String a = "https://vhackxt.com/v/1/";

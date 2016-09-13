@@ -1,7 +1,13 @@
 package dan.vhack;
 
+import java.util.Date;
+
+import org.jongo.marshall.jackson.oid.MongoId;
+
 public class ScanData {
 
+	@MongoId
+	private String ip;
 	private String username;
 	private int firewall;
 	private int antivirus;
@@ -12,9 +18,19 @@ public class ScanData {
 	private boolean anonymous;
 	private int success;
 	private boolean error;
-
+	private Date lastScanned;
+	private int score;
+	
 	public ScanData() {
 		super();
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
 	}
 
 	public String getUsername() {
@@ -97,9 +113,25 @@ public class ScanData {
 		this.error = error;
 	}
 	
+	public Date getLastScanned() {
+		return lastScanned;
+	}
+
+	public void setLastScanned(Date lastScanned) {
+		this.lastScanned = lastScanned;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
 	@Override
 	public String toString() {
-		return "AV: " + this.antivirus + " - Money: " + this.money + " - Success: " + this.success;
+		return "Score: " + this.score + " - AV: " + this.antivirus + " - Money: " + this.money + " - Success: " + this.success;
 	}
 
 }
