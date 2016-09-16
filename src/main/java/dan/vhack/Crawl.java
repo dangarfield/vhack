@@ -86,6 +86,8 @@ public class Crawl {
 
 	private static void prepareRoutes() {
 		
+		System.out.println("IP: " + IP_ADDRESS);
+		System.out.println("Port: " + PORT);
 		ipAddress(IP_ADDRESS);
 		port(PORT);
 		staticFileLocation("/public");
