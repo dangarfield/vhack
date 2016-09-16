@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:orientation="1" android:id="@e/navigation_header_container" android:paddingBottom="@d/design_navigation_separator_vertical_padding" android:layout_width="-1" android:layout_height="-2" />

@@ -34,6 +34,7 @@ public class UserData {
 	private String position;
 	private int spam;
 	private String hash;
+	private Auth auth;
 
 	public UserData() {
 		super();
@@ -293,6 +294,14 @@ public class UserData {
 
 	public void setHash(String hash) {
 		this.hash = hash;
+	}
+
+	public Auth getAuth() {
+		return auth;
+	}
+
+	public void setAuth(Auth auth) {
+		this.auth = auth;
 	}
 
 	@Override

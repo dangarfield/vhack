@@ -1,5 +1,6 @@
 package dan.vhack;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
@@ -7,13 +8,16 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.jetty.websocket.api.Session;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
-import org.jongo.MongoCursor;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.mashape.unirest.http.HttpResponse;
@@ -25,6 +29,9 @@ import com.mashape.unirest.http.options.Options;
 import com.mashape.unirest.request.HttpRequest;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
+import com.mongodb.util.JSON;
 
 import net.jodah.failsafe.ExecutionContext;
 import net.jodah.failsafe.Failsafe;
@@ -32,6 +39,14 @@ import net.jodah.failsafe.RetryPolicy;
 import net.jodah.failsafe.function.CheckedBiConsumer;
 import net.jodah.failsafe.function.CheckedConsumer;
 import net.jodah.failsafe.function.ContextualCallable;
+import spark.ModelAndView;
+import spark.Request;
+import spark.Response;
+import spark.Route;
+import spark.TemplateViewRoute;
+import spark.template.handlebars.HandlebarsTemplateEngine;
+
+import static spark.Spark.*;
 
 public class Crawl {
 
@@ -55,45 +70,202 @@ public class Crawl {
 	static RetryPolicy unirestRetryPolicy = new RetryPolicy().retryOn(UnirestException.class, JsonParseException.class)
 			.withMaxRetries(5);
 
-	public static void main(String[] args) throws UnirestException, KeyManagementException, NoSuchAlgorithmException,
-			KeyStoreException, InterruptedException {
+	private static final String IP_ADDRESS = System.getenv("OPENSHIFT_DIY_IP") != null
+			? System.getenv("OPENSHIFT_DIY_IP") : "localhost";
+	private static final int PORT = System.getenv("OPENSHIFT_DIY_PORT") != null
+			? Integer.parseInt(System.getenv("OPENSHIFT_DIY_PORT")) : 80;
 
+	private static Map<String, Thread> RUNNING_USER_THREADS = new HashMap<String, Thread>();
+	protected static Map<String, Session> RUNNING_USER_WS_SESSIONS = new HashMap<String, Session>();
+
+	public static void main(String[] args) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException  {
 		Actions.prepareUniRest();
-
 		prepareDB();
+		prepareRoutes();
+	}
 
-		UserData userData = getUserData();
+	private static void prepareRoutes() {
+		
+		ipAddress(IP_ADDRESS);
+		port(PORT);
+		staticFileLocation("/public");
+		bindWebsockets();
+		
+		get("/", new TemplateViewRoute() {
+			@Override
+			public ModelAndView handle(Request req, Response res) throws Exception {
+				Map<String, Object> map = new HashMap<String, Object>();
+				String error = req.queryParams("error");
+				if (error != null) {
+					map.put("error", error);
+				}
+				return new ModelAndView(map, "index.html");
+			}
+		}, new HandlebarsTemplateEngine());
+
+		post("/login", new Route() {
+			@Override
+			public Object handle(Request req, Response res) throws Exception {
+				String username = req.queryParams("username");
+				String password = req.queryParams("password");
+				Auth auth = new Auth(username, password);
+				try {
+					UserData userData = getUserData(auth);
+					System.out.println(userData);
+					req.session().attribute("username", username);
+					req.session().attribute("password", password);
+					res.redirect("/user/" + username);
+					return "";
+				} catch (Exception e) {
+					res.redirect("/?error=Credentials not valid, please try again");
+					return "";
+				}
+			}
+		});
+
+		get("/user/:username", new TemplateViewRoute() {
+			@Override
+			public ModelAndView handle(Request req, Response res) throws Exception {
+
+				Auth auth = getSessionAuth(req.params("username"), req);
+				if (auth == null) {
+					res.redirect("/?error=Credentials not valid, please try again");
+					return null;
+				} else {
+					//bindWebsocket(auth.getUsername());
+					UserData userData = getUserData(auth);
+					Map<String, Object> map = new HashMap<String, Object>();
+					map.put("collectionRunning", getRunningStatus(auth.getUsername()));
+					map.put("userData", userData);
+					BotnetInfoData botnetInfoData = getBotnetInfo(userData);
+					map.put("botnetInfoData", botnetInfoData);
+					map.put("botnetInfoDataData", botnetInfoData.getData());
+					return new ModelAndView(map, "user.html");
+				}
+			}
+
+		}, new HandlebarsTemplateEngine());
+
+		get("/user/:username/:action", new Route() {
+			@Override
+			public Object handle(Request req, Response res) throws Exception {
+				Auth auth = getSessionAuth(req.params("username"), req);
+				if (auth == null) {
+					res.redirect("/?error=Credentials not valid, please try again");
+					return "";
+				} else {
+					String action = req.params("action");
+					res.type("application/json");
+					if (action.equals("start")) {
+						setRunningStatus(auth, true);
+						return JSON.parse("{\"collectionRunning\":" + true + "}");
+					} else if (action.equals("stop")) {
+						setRunningStatus(auth, false);
+						return JSON.parse("{\"collectionRunning\":" + false + "}");
+					} else {
+						return JSON.parse("{\"error\":true}");
+					}
+				}
+			}
+		});
+		
+		get("/connections", new Route() {
+
+			@Override
+			public Object handle(Request req, Response res) throws Exception {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("threads", RUNNING_USER_THREADS);
+				map.put("wsSessions", RUNNING_USER_WS_SESSIONS);
+				return map;
+			}
+			
+		});
+	}
+
+	private static void bindWebsockets() {
+		System.out.println("Binding websockets");
+		webSocket("/events", UserWebSocketHandler.class);
+		System.out.println("Bound websockets");
+	}
+
+	
+
+	private static boolean getRunningStatus(String username) {
+		return RUNNING_USER_THREADS.containsKey(username) ? true : false;
+	}
+
+	private static void setRunningStatus(Auth auth, boolean running) {
+		if (running) {
+			if (!RUNNING_USER_THREADS.containsKey(auth.getUsername())) {
+				Thread thread = new Thread(() -> {
+					try {
+						beginRunning(auth);
+					} catch (Exception e) {
+						setRunningStatus(auth, false);
+						System.out.println("Thread has died");
+						if(e instanceof InterruptedException) {
+							logToUser(auth.getUsername(), "info|Running has stopped");	
+						} else {
+							logToUser(auth.getUsername(), "error|Something went wrong, running has stopped");
+						}
+						
+					}
+				});
+				RUNNING_USER_THREADS.put(auth.getUsername(), thread);
+				thread.start();
+			}
+		} else {
+			if (RUNNING_USER_THREADS.containsKey(auth.getUsername())) {
+				Thread thread = RUNNING_USER_THREADS.get(auth.getUsername());
+				RUNNING_USER_THREADS.remove(auth.getUsername());
+				thread.interrupt();
+			}
+		}
+	}
+
+	private static void beginRunning(Auth auth) throws InterruptedException, UnirestException {
+		UserData userData = getUserData(auth);
 		System.out.println(userData);
-
-		// doINeedMoney(userData);
-		// generateMoney(userData);
-//		 performAnyUpgrades(userData);
-		// performAnyBotnet(userData);
-		// buyPackages(userData);
-
-		while (true) {
+		
+		
+//		generateMoney(userData);
+		
+		while (getRunningStatus(auth.getUsername())) {
 			try {
 				while (!doINeedMoney(userData)) {
+					sendUserDataToUser(userData);
 					System.out.println("I don't need money at the minute, pausing for 1 min");
+					logToUser(auth.getUsername(), "info|Don't need money at the minute, pausing for 1 min");
 					Thread.sleep(1 * 60 * 1000);
 				}
 				int count = 0;
 				while (count <= 10) {
 					System.out.println("%%%% COUNT - " + count + " %%%%");
+					sendUserDataToUser(userData);
 					generateMoney(userData);
 					count++;
 				}
-				userData = getUserData();
+				userData = getUserData(userData.getAuth());
 				buyPackages(userData);
 				performAnyUpgrades(userData);
 				performAnyBotnet(userData);
-
+				sendUserDataToUser(userData);
 			} catch (UnirestException e) {
 				// e.printStackTrace();
 				System.out.println("---- Error with http res");
 			}
 		}
+	}
 
+	
+
+	private static Auth getSessionAuth(String expectedUsername, Request req) {
+		String sessionUsername = req.session().attribute("username");
+		String password = req.session().attribute("password");
+		if (!expectedUsername.equals(sessionUsername)) {
+			return null;
+		}
+		return new Auth(sessionUsername, password);
 	}
 
 	private static void buyPackages(UserData userData) {
@@ -108,6 +280,10 @@ public class Crawl {
 			BonusData bonusData = openPremBonus(userData);
 			userData.setNetcoins(bonusData.getBleft());
 			String bonusDataStringResult = translateBonusDataResult(bonusData);
+			if(!bonusData.isError()) {
+				logToUser(userData.getAuth().getUsername(), "package|"+bonusDataStringResult);	
+			}
+			
 			System.out.println(bonusDataStringResult);
 		}
 	}
@@ -366,6 +542,7 @@ public class Crawl {
 			upgradeItem.setbLVL(botnetUpgradeResultData.getNewLevel());
 			upgradeItem.setbPRICE(botnetUpgradeResultData.getNewLevel() * 100000);
 			upgradeItem.setbSTR(botnetUpgradeResultData.getStrength());
+			logToUser(userData.getAuth().getUsername(), "upgrade|Botnet PC "+upgradeItem.getbID() + " upgraded to level " + upgradeItem.getbLVL());
 			return true;
 		} else {
 			System.out.println("Botnet upgrade not possible");
@@ -393,27 +570,28 @@ public class Crawl {
 
 	private static void prepareDB() {
 
-		@SuppressWarnings({ "resource", "deprecation" })
-		DB db = new MongoClient().getDB("vhack");
+		DB db = getDB();
 		Jongo jongo = new Jongo(db);
 		scans = jongo.getCollection("scans");
 		money = jongo.getCollection("money");
 
-//		MongoCursor<ScanData> datas = scans.find().sort("{_id:-1}").as(ScanData.class);
-//		int count = 0;
-//		for (ScanData d : datas) {
-//			
-//			System.out.println(count + " - " + d);
-////			d.setScore(generateScore(d));
-//			String orig = d.getUsername();
-//			if(orig == null) {
-//				orig = "";
-//			}
-//			d.setUsername(orig.replace("          [ + ] Username: ", "").replace("          [ - ] Username: ", ""));
-//			scans.save(d);
-//			count++;
-//		}
-		
+		// MongoCursor<ScanData> datas =
+		// scans.find().sort("{_id:-1}").as(ScanData.class);
+		// int count = 0;
+		// for (ScanData d : datas) {
+		//
+		// System.out.println(count + " - " + d);
+		//// d.setScore(generateScore(d));
+		// String orig = d.getUsername();
+		// if(orig == null) {
+		// orig = "";
+		// }
+		// d.setUsername(orig.replace(" [ + ] Username: ", "").replace(" [ - ]
+		// Username: ", ""));
+		// scans.save(d);
+		// count++;
+		// }
+
 		// Aggregation for money per minute:
 
 		// db.money.aggregate([
@@ -436,6 +614,25 @@ public class Crawl {
 		// }},
 		// {"$sort":{"_id":1}}
 		// ]);
+	}
+
+	@SuppressWarnings({ "resource", "deprecation" })
+	private static DB getDB() {
+		String host = System.getenv("OPENSHIFT_MONGODB_DB_HOST");
+        if (host == null) {
+            MongoClient mongoClient = new MongoClient("localhost");
+            return mongoClient.getDB("todoapp");
+        }
+        int port = Integer.parseInt(System.getenv("OPENSHIFT_MONGODB_DB_PORT"));
+        String dbname = System.getenv("OPENSHIFT_APP_NAME");
+        String username = System.getenv("OPENSHIFT_MONGODB_DB_USERNAME");
+        String password = System.getenv("OPENSHIFT_MONGODB_DB_PASSWORD");
+        
+        MongoCredential credential = MongoCredential.createCredential(username, dbname, password.toCharArray());
+        MongoClient mongoClient = new MongoClient(new ServerAddress(host, port), Arrays.asList(credential));
+        
+        DB db = mongoClient.getDB(dbname);
+        return db;
 	}
 
 	private static void performAnyUpgrades(UserData userData) throws UnirestException {
@@ -512,6 +709,7 @@ public class Crawl {
 
 		if (upgradeResultData.getResult().equals("0")) {
 			System.out.println("&&&&&&& Successful upgrade of " + item);
+			logToUser(userData.getAuth().getUsername(), "upgrade|Successful upgrade of " + item + " to level " + upgradeResultData.getNewLevel());
 			return true;
 		} else if (upgradeResultData.getResult().equals("1")) {
 			int money = Integer.valueOf(upgradeResultData.getMoney()).intValue();
@@ -592,6 +790,7 @@ public class Crawl {
 			userData.setMoney(trojanResult.getNewmoney());
 			System.out.println(userData);
 			System.out.println("####### New Money: " + userData.getMoney() + " #######");
+			logToUser(userData.getAuth().getUsername(), "collect|Trojan successful, received £" + trojanResult.getAmount());
 			MoneyData moneyData = new MoneyData();
 			moneyData.setIp(userData.getIp());
 			moneyData.setDate(new Date());
@@ -624,13 +823,13 @@ public class Crawl {
 
 		if (lines.length == 14) {
 			try {
-				scanData.setUsername(lines[1].replace("          [ + ] Username: ", "").replace("          [ - ] Username: ", ""));
+				scanData.setUsername(
+						lines[1].replace("          [ + ] Username: ", "").replace("          [ - ] Username: ", ""));
 				scanData.setFirewall(Integer.valueOf(lines[2].replaceAll("[^0-9]", "")).intValue());
 				scanData.setAntivirus(Integer.valueOf(lines[3].replaceAll("[^0-9]", "")).intValue());
 				scanData.setScan(Integer.valueOf(lines[4].replaceAll("[^0-9]", "")).intValue());
 				scanData.setSdk(Integer.valueOf(lines[5].replaceAll("[^0-9]", "")).intValue());
 				scanData.setSpam(Integer.valueOf(lines[6].replaceAll("[^0-9]", "")).intValue());
-
 				scanData.setMoney(Integer.valueOf(lines[7].replaceAll("[^0-9]", "")).intValue());
 
 				scanData.setAnonymous(lines[9].contains(": YES"));
@@ -638,7 +837,7 @@ public class Crawl {
 				scanData.setSuccess(Integer.valueOf(lines[13].replaceAll("[^0-9]", "")).intValue());
 
 				scanData.setScore(generateScore(scanData));
-				
+
 			} catch (Exception e) {
 				// e.printStackTrace();
 				System.out.println("Exception translating scan");
@@ -652,35 +851,35 @@ public class Crawl {
 	}
 
 	private static int generateScore(ScanData scanData) {
-		int score = 0; 
+		int score = 0;
 		score += scanData.getFirewall() * 3;
 		score += scanData.getAntivirus() * 3;
 		score += scanData.getSdk() * 5;
-		//score += scanData.get * 3; // IP Spoofing unknown 
+		// score += scanData.get * 3; // IP Spoofing unknown
 		score += scanData.getSpam() * 5; //
 		score += scanData.getScan() * 3;
-		//score += scanData.get * 3; / Adware unknown
-		
-		
+		// score += scanData.get * 3; / Adware unknown
+
 		int adwareAndSpoofingEstimation = BigInteger.valueOf(score).divide(BigInteger.valueOf(19)).intValue() * 7;
 		score += adwareAndSpoofingEstimation;
-		
+
 		// Assume full hardware bonus
 		score += 3000;
 		return score;
 	}
 
-	private static UserData getUserData() throws UnirestException {
+	private static UserData getUserData(Auth auth) throws UnirestException {
 
 		@SuppressWarnings("rawtypes")
 		UserData result = retryCall(new ContextualCallable() {
 			@Override
 			public Object call(ExecutionContext context) throws Exception {
-				String updateUrl = Actions.generateActionUrl("", "", "vh_update.php", null);
+				String updateUrl = Actions.generateActionUrl("", "", "vh_update.php", auth);
 				// System.out.println(updateUrl);
 				HttpRequest req = Unirest.get(updateUrl);
 				HttpResponse<UserData> res = req.asObject(UserData.class);
 				UserData userData = res.getBody();
+				userData.setAuth(auth);
 				return userData;
 			}
 		}, UserData.class);
@@ -725,6 +924,35 @@ public class Crawl {
 			}
 		}).get(method);
 		return (T) result;
+	}
+	
+	private static void sendUserDataToUser(UserData userData) {
+		Session session = RUNNING_USER_WS_SESSIONS.get(userData.getAuth().getUsername());
+		if(session != null) {
+			try {
+				com.fasterxml.jackson.databind.ObjectMapper objectMapper
+                = new com.fasterxml.jackson.databind.ObjectMapper();
+				
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("userData", userData);
+				map.put("botnetInfoData", getBotnetInfo(userData));
+				map.put("taskData", getTaskData(userData));
+				session.getRemote().sendString(objectMapper.writeValueAsString(map));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private static void logToUser(String username, String msg) {
+		Session session = RUNNING_USER_WS_SESSIONS.get(username);
+		if(session != null) {
+			try {
+				session.getRemote().sendString(msg);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

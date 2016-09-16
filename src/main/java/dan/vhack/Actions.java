@@ -63,9 +63,15 @@ public class Actions {
 	    
 	}
     
+    public static String generateActionUrl(String action, String value, String path, Auth auth) {
+    	String username = auth.getUsername();
+    	String pass = auth.getPassword();
+    	String uhash = "";
+    	return generateActionUrl(action, value, path, username, pass, uhash);
+    }
     public static String generateActionUrl(String action, String value, String path, UserData userData) {
-    	String username = "dangarfield";
-    	String pass = "perfection";
+    	String username = userData.getAuth().getUsername();
+    	String pass = userData.getAuth().getPassword();
     	String uhash = "";
     	if(userData != null) {
     		uhash = userData.getUhash();

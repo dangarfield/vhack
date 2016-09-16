@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout app:layout_width="-1" app:layout_height="-1">
-    <View app:id="@e/touch_outside" app:layout_width="-1" app:layout_height="-1" app:soundEffectsEnabled="false" />
-    <FrameLayout app:layout_gravity="31" app:id="@e/design_bottom_sheet" app:clickable="true" app:layout_width="-1" app:layout_height="-2" app:layout_behavior="0x7f070100" style="?unknown_attr_ref: 7f0100be" />
-</android.support.design.widget.CoordinatorLayout>
