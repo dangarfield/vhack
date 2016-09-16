@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="icon" href="../../favicon.ico">
+
+<title>{{userData.auth.username}} - vHack Hack</title>
+
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+	<!-- <nav class="navbar navbar-fixed-top navbar-dark bg-inverse">
+      <a class="navbar-brand" href="#">Project name</a>
+      <ul class="nav navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Contact</a>
+        </li>
+      </ul>
+    </nav> -->
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6">
+				<h1 data-username="{{userData.auth.username}}">{{userData.auth.username}}</h1>
+				<h4>
+					$<span class="val-money">{{userData.money}}</span> | <span
+						class="val-netcoins">{{userData.netcoins}}</span> Netcoins |
+					Score: <span class="val-score">{{userData.score}}</span> | Rank: <span
+						class="val-rank">{{userData.rank}}</span>
+				</h4>
+
+				<hr class="m-y-2">
+
+
+				<div
+					class="alert alert-success {{#unless collectionRunning}} hidden-xl-down{{/unless}}"
+					role="alert">
+					<strong>Running!</strong> We're getting money, upgrading and
+					opening packages!
+				</div>
+
+				<div
+					class="alert alert-info {{#if collectionRunning}} hidden-xl-down{{/if}}"
+					role="alert">
+					<strong>Not running!</strong> We're not running at the minute,
+					start running!
+				</div>
+				<div class="alert alert-danger hidden-xl-down" role="alert"></div>
+
+				<button type="button" class="btn btn-primary btn-action"
+					data-action="/user/{{userData.auth.username}}/start" {{#if collectionRunning}} disabled{{/if}}>Start</button>
+				<button type="button" class="btn btn-default btn-action"
+					data-action="/user/{{userData.auth.username}}/stop" {{#unless collectionRunning}} disabled{{/unless}}>Stop</button>
+
+				<hr class="m-y-2">
+
+				<div class="log">
+					<h6>Real Time Log</h6>
+					<div class="inner"></div>
+				</div>
+
+				<hr class="m-y-2">
+			</div>
+
+			<div class="col-md-3 col-xs-6">
+				<div class="stats">
+					<ul class="list-group">
+						<li class="list-group-item"><span
+							class="tag tag-default tag-pill pull-xs-right val-inet">{{userData.inet}}</span>
+							<span class="tag tag-info tag-pill pull-xs-right train"><span class="val-train-inet"></span></span>
+							Internet</li>
+						<li class="list-group-item"><span
+							class="tag tag-default tag-pill pull-xs-right val-fw">{{userData.fw}}</span>
+							<span class="tag tag-info tag-pill pull-xs-right train"><span class="val-train-fw"></span></span>
+							Firewall</li>
+						<li class="list-group-item"><span
+							class="tag tag-default tag-pill pull-xs-right val-av">{{userData.av}}</span>
+							<span class="tag tag-info tag-pill pull-xs-right train"><span class="val-train-av"></span></span>
+							Antivirus</li>
+						<li class="list-group-item"><span
+							class="tag tag-default tag-pill pull-xs-right val-sdk">{{userData.sdk}}</span>
+							<span class="tag tag-info tag-pill pull-xs-right train"><span class="val-train-sdk"></span></span>
+							SDK</li>
+						<li class="list-group-item"><span
+							class="tag tag-default tag-pill pull-xs-right val-ipsp">{{userData.ipsp}}</span>
+							<span class="tag tag-info tag-pill pull-xs-right train"><span class="val-train-ipsp"></span></span>
+							IP-Spoofing</li>
+						<li class="list-group-item"><span
+							class="tag tag-default tag-pill pull-xs-right val-spam">{{userData.spam}}</span>
+							<span class="tag tag-info tag-pill pull-xs-right train"><span class="val-train-spam"></span></span>
+							Spam</li>
+						<li class="list-group-item"><span
+							class="tag tag-default tag-pill pull-xs-right val-scan">{{userData.scan}}</span>
+							<span class="tag tag-info tag-pill pull-xs-right train"><span class="val-train-scan"></span></span>
+							Scan</li>
+						<li class="list-group-item"><span
+							class="tag tag-default tag-pill pull-xs-right val-adw">{{userData.adw}}</span>
+							<span class="tag tag-info tag-pill pull-xs-right train"><span class="val-train-adw"></span></span>
+							AdWare</li>
+						<li class="list-group-item"><span
+							class="tag tag-default tag-pill pull-xs-right val-cpu">{{userData.cpu}}</span>
+							<span class="tag tag-info tag-pill pull-xs-right train"><span class="val-train-cpu"></span></span>
+							CPU</li>
+						<li class="list-group-item"><span
+							class="tag tag-default tag-pill pull-xs-right val-ram">{{userData.ram}}</span>
+							<span class="tag tag-info tag-pill pull-xs-right train"><span class="val-train-ram"></span></span>
+							RAM</li>
+						<li class="list-group-item"><span
+							class="tag tag-default tag-pill pull-xs-right val-hdd">{{userData.hdd}}</span>
+							<span class="tag tag-info tag-pill pull-xs-right train"><span class="val-train-hdd"></span></span>
+							HDD</li>
+					</ul>
+				</div>
+			</div>
+
+
+			<div class="col-md-3 col-xs-6">
+				<div class="botnet">
+					<ul class="list-group">
+						<li class="list-group-item"><span
+							class="tag tag-default tag-pill pull-xs-right"><span
+								class="val-strength">{{botnetInfoData.strength}}</span> %</span>
+							Strength</li>
+						<li class="list-group-item"><span
+							class="tag tag-default tag-pill pull-xs-right"><span
+								class="val-resethours1">{{botnetInfoData.resethours1}}</span>:<span
+								class="val-resetminutes1">{{botnetInfoData.resetminutes1}}</span></span>
+							KFM-Solutions</li>
+						<li class="list-group-item"><span
+							class="tag tag-default tag-pill pull-xs-right"><span
+								class="val-resethours2">{{botnetInfoData.resethours2}}</span>:<span
+								class="val-resetminutes2">{{botnetInfoData.resetminutes2}}</span></span>
+							vHack Server</li> {{#each botnetInfoData.data}}
+						<li class="list-group-item botnet" data-botnet="{{this}}"><span
+							class="tag tag-default tag-pill pull-xs-right">Level <span
+								class="botnet-lvl">{{bLVL}}</span></span> Botnet PC <span
+							class="botnet-id"></span></li> {{/each}}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /.container -->
+
+
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="/js/jquery-3.1.0.min.js"></script>
+	<script src="/js/tether.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/socket.io.min.js"></script>
+	<script src="/js/custom.js"></script>
+
+
+</body>
+</html>
