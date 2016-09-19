@@ -66,6 +66,8 @@ public class Crawl {
 	private static MongoCollection scans;
 	private static MongoCollection money;
 
+	private static boolean USE_MONGO = false;
+	
 	@SuppressWarnings("unchecked")
 	static RetryPolicy unirestRetryPolicy = new RetryPolicy().retryOn(UnirestException.class, JsonParseException.class)
 			.withMaxRetries(5);
@@ -80,7 +82,10 @@ public class Crawl {
 
 	public static void main(String[] args) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException  {
 		Actions.prepareUniRest();
-		prepareDB();
+		if(USE_MONGO) {
+			prepareDB();	
+		}
+		
 		prepareRoutes();
 	}
 
@@ -761,7 +766,9 @@ public class Crawl {
 
 				ScanData scanData = getScanData(target.getIp(), userData.getSdk(), userData);
 				System.out.println(scanData);
-				scans.save(scanData);
+				if(USE_MONGO) {
+					scans.save(scanData);
+				}
 
 				if (!scanData.isError() && scanData.getAntivirus() < userData.getSdk() && scanData.getSuccess() >= 60
 						&& scanData.getMoney() >= 100000) {
@@ -797,7 +804,9 @@ public class Crawl {
 			moneyData.setIp(userData.getIp());
 			moneyData.setDate(new Date());
 			moneyData.setMoney(trojanResult.getAmount());
-			money.save(moneyData);
+			if(USE_MONGO) {
+				money.save(moneyData);
+			}
 		} else {
 			System.out.println("Didn't get any money");
 		}
