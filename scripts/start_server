@@ -1,2 +1,2 @@
 #!/bin/bash
-nohup java -jar target/vhack-1.0-SNAPSHOT.jar > vhack.log 2>&1 &
+java -jar target/vhack-1.0-SNAPSHOT.jar
