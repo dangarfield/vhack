@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.jongo.Jongo;
@@ -66,9 +68,11 @@ public class Crawl {
 	private static MongoCollection scans;
 	private static MongoCollection money;
 
+	private static boolean USE_DB = false;
+	
 	@SuppressWarnings("unchecked")
 	static RetryPolicy unirestRetryPolicy = new RetryPolicy().retryOn(UnirestException.class, JsonParseException.class)
-			.withMaxRetries(5);
+			.withMaxRetries(10).withDelay( 1, TimeUnit.SECONDS);
 
 	private static final String IP_ADDRESS = System.getenv("OPENSHIFT_DIY_IP") != null
 			? System.getenv("OPENSHIFT_DIY_IP") : "localhost";
@@ -77,10 +81,14 @@ public class Crawl {
 
 	private static Map<String, Thread> RUNNING_USER_THREADS = new HashMap<String, Thread>();
 	protected static Map<String, Session> RUNNING_USER_WS_SESSIONS = new HashMap<String, Session>();
+	protected static Map<String, ChatService> RUNNING_USER_WS_CHAT_SERVICE = new HashMap<String, ChatService>();
 
 	public static void main(String[] args) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException  {
 		Actions.prepareUniRest();
-		prepareDB();
+		if(USE_DB) {
+			prepareDB();	
+		}
+		
 		prepareRoutes();
 	}
 
@@ -164,6 +172,20 @@ public class Crawl {
 					} else if (action.equals("stop")) {
 						setRunningStatus(auth, false);
 						return JSON.parse("{\"collectionRunning\":" + false + "}");
+					} else if (action.startsWith("scan-")) {
+						String ip = action.replace("scan-", "");
+						Pattern pat = Pattern.compile("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$");
+						
+						if(pat.matcher(ip).matches()) {
+							ScanData scanData = getScanData(ip, getUserData(auth));
+							return JSON.serialize(scanData);
+							//return scanData; 
+						} else {
+							return JSON.parse("{\"error\":true}");
+						}
+					} else if (action.equals("stop")) {
+						setRunningStatus(auth, false);
+						return JSON.parse("{\"collectionRunning\":" + false + "}");
 					} else {
 						return JSON.parse("{\"error\":true}");
 					}
@@ -175,6 +197,7 @@ public class Crawl {
 
 			@Override
 			public Object handle(Request req, Response res) throws Exception {
+				res.type("application/json");
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("threads", RUNNING_USER_THREADS);
 				map.put("wsSessions", RUNNING_USER_WS_SESSIONS);
@@ -216,11 +239,29 @@ public class Crawl {
 				RUNNING_USER_THREADS.put(auth.getUsername(), thread);
 				thread.start();
 			}
+			if(!RUNNING_USER_WS_CHAT_SERVICE.containsKey(auth.getUsername())) {
+				
+				try {
+					UserData userData = getUserData(auth);
+					ChatService chatService = new ChatService(userData);
+					RUNNING_USER_WS_CHAT_SERVICE.put(auth.getUsername(), chatService);
+					
+				} catch (UnirestException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
 		} else {
 			if (RUNNING_USER_THREADS.containsKey(auth.getUsername())) {
 				Thread thread = RUNNING_USER_THREADS.get(auth.getUsername());
 				RUNNING_USER_THREADS.remove(auth.getUsername());
 				thread.interrupt();
+			}
+			if(RUNNING_USER_WS_CHAT_SERVICE.containsKey(auth.getUsername())) {
+				ChatService chatService = RUNNING_USER_WS_CHAT_SERVICE.get(auth.getUsername());
+				RUNNING_USER_WS_SESSIONS.remove(chatService);
+				chatService.setRunning(false);
 			}
 		}
 	}
@@ -618,6 +659,23 @@ public class Crawl {
 		// ]);
 	}
 
+	protected static String getUserScanString(String username) {
+		if(USE_DB) {
+			return "Unknown";
+		}
+		try {
+			ScanData scanData = scans.findOne("{\"username\":#}",username).as(ScanData.class);
+			if(scanData == null) {
+				return "Unknown";
+			} else {
+				return scanData.getIp() + "|||" + scanData.getFirewall() + "|||" + scanData.getAntivirus() + "|||" + scanData.getSdk() + "|||" + scanData.getSpam() + "|||" + scanData.getScan() + "|||" + scanData.getMoney() + "|||" + scanData.getSuccess() + "|||" + scanData.getLastScanned();
+			}
+		} catch (Exception e) {
+			return "Error";
+		}
+		
+	}
+	
 	@SuppressWarnings({ "resource", "deprecation" })
 	private static DB getDB() {
 		String host = System.getenv("OPENSHIFT_MONGODB_DB_HOST");
@@ -676,7 +734,7 @@ public class Crawl {
 		upgradeCalcList.add(new UpgradeCalc("SDK", 100, RESOURCE_SDK, userData.getSdk()));
 		upgradeCalcList.add(new UpgradeCalc("IP-Spoofing", 60, RESOURCE_IPSPOOFING, userData.getIpsp()));
 		upgradeCalcList.add(new UpgradeCalc("Spam", 100, RESOURCE_SPAM, userData.getSpam()));
-		upgradeCalcList.add(new UpgradeCalc("Scan", 60, RESOURCE_SCAN, userData.getScan()));
+		upgradeCalcList.add(new UpgradeCalc("Scan", 100, RESOURCE_SCAN, userData.getScan()));
 		upgradeCalcList.add(new UpgradeCalc("AdWare", 80, RESOURCE_ADWARE, userData.getAdw()));
 
 		int max = 0;
@@ -756,14 +814,17 @@ public class Crawl {
 		for (NetworkDataItem target : networkData.getData()) {
 			int fw = target.getFw();
 
-			if (target.getAttacked().equals("0") && fw >= 7 && fw < userData.getScan()) {
+			if (target.getAttacked().equals("0") && fw >= 7 && fw < (userData.getScan()*2)) {
 				System.out.println("scan: " + target);
 
-				ScanData scanData = getScanData(target.getIp(), userData.getSdk(), userData);
+				ScanData scanData = getScanData(target.getIp(), userData);
 				System.out.println(scanData);
-				scans.save(scanData);
+				if(USE_DB) {
+					scans.save(scanData);	
+				}
+				
 
-				if (!scanData.isError() && scanData.getAntivirus() < userData.getSdk() && scanData.getSuccess() >= 60
+				if (!scanData.isError() && scanData.getSuccess() >= 70
 						&& scanData.getMoney() >= 100000) {
 					System.out.println("LOOKS LIKE A GOOD TARGET");
 					launchTrojan(target.getIp(), userData);
@@ -797,13 +858,16 @@ public class Crawl {
 			moneyData.setIp(userData.getIp());
 			moneyData.setDate(new Date());
 			moneyData.setMoney(trojanResult.getAmount());
-			money.save(moneyData);
+			if(USE_DB) {
+				money.save(moneyData);	
+			}
+			
 		} else {
 			System.out.println("Didn't get any money");
 		}
 	}
 
-	private static ScanData getScanData(String ip, int mySDK, UserData userData) throws UnirestException {
+	private static ScanData getScanData(String ip, UserData userData) throws UnirestException {
 
 		@SuppressWarnings("rawtypes")
 		String scanResult = retryCall(new ContextualCallable() {
@@ -946,7 +1010,7 @@ public class Crawl {
 		}
 	}
 	
-	private static void logToUser(String username, String msg) {
+	protected static void logToUser(String username, String msg) {
 		Session session = RUNNING_USER_WS_SESSIONS.get(username);
 		if(session != null) {
 			try {
