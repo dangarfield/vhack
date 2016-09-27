@@ -77,7 +77,7 @@ public class Crawl {
 	private static final String IP_ADDRESS = System.getenv("OPENSHIFT_DIY_IP") != null
 			? System.getenv("OPENSHIFT_DIY_IP") : "localhost";
 	private static final int PORT = System.getenv("OPENSHIFT_DIY_PORT") != null
-			? Integer.parseInt(System.getenv("OPENSHIFT_DIY_PORT")) : 80;
+			? Integer.parseInt(System.getenv("OPENSHIFT_DIY_PORT")) : 4567;
 
 	private static Map<String, Thread> RUNNING_USER_THREADS = new HashMap<String, Thread>();
 	protected static Map<String, Session> RUNNING_USER_WS_SESSIONS = new HashMap<String, Session>();
