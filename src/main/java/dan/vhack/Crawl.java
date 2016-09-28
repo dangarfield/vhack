@@ -69,6 +69,7 @@ public class Crawl {
 	private static MongoCollection money;
 
 	private static boolean USE_DB = false;
+	private static boolean USE_CHAT = false;
 	
 	@SuppressWarnings("unchecked")
 	static RetryPolicy unirestRetryPolicy = new RetryPolicy().retryOn(UnirestException.class, JsonParseException.class)
@@ -77,7 +78,7 @@ public class Crawl {
 	private static final String IP_ADDRESS = System.getenv("OPENSHIFT_DIY_IP") != null
 			? System.getenv("OPENSHIFT_DIY_IP") : "localhost";
 	private static final int PORT = System.getenv("OPENSHIFT_DIY_PORT") != null
-			? Integer.parseInt(System.getenv("OPENSHIFT_DIY_PORT")) : 4567;
+			? Integer.parseInt(System.getenv("OPENSHIFT_DIY_PORT")) : 80;
 
 	private static Map<String, Thread> RUNNING_USER_THREADS = new HashMap<String, Thread>();
 	protected static Map<String, Session> RUNNING_USER_WS_SESSIONS = new HashMap<String, Session>();
@@ -239,7 +240,7 @@ public class Crawl {
 				RUNNING_USER_THREADS.put(auth.getUsername(), thread);
 				thread.start();
 			}
-			if(!RUNNING_USER_WS_CHAT_SERVICE.containsKey(auth.getUsername())) {
+			if(USE_CHAT && !RUNNING_USER_WS_CHAT_SERVICE.containsKey(auth.getUsername())) {
 				
 				try {
 					UserData userData = getUserData(auth);
@@ -258,7 +259,7 @@ public class Crawl {
 				RUNNING_USER_THREADS.remove(auth.getUsername());
 				thread.interrupt();
 			}
-			if(RUNNING_USER_WS_CHAT_SERVICE.containsKey(auth.getUsername())) {
+			if(USE_CHAT && RUNNING_USER_WS_CHAT_SERVICE.containsKey(auth.getUsername())) {
 				ChatService chatService = RUNNING_USER_WS_CHAT_SERVICE.get(auth.getUsername());
 				RUNNING_USER_WS_SESSIONS.remove(chatService);
 				chatService.setRunning(false);
@@ -824,8 +825,7 @@ public class Crawl {
 				}
 				
 
-				if (!scanData.isError() && scanData.getSuccess() >= 70
-						&& scanData.getMoney() >= 100000) {
+				if (!scanData.isError() && scanData.getSuccess() >= 70) {
 					System.out.println("LOOKS LIKE A GOOD TARGET");
 					launchTrojan(target.getIp(), userData);
 				}
@@ -853,7 +853,7 @@ public class Crawl {
 			userData.setMoney(trojanResult.getNewmoney());
 			System.out.println(userData);
 			System.out.println("####### New Money: " + userData.getMoney() + " #######");
-			logToUser(userData.getAuth().getUsername(), "collect|Trojan successful, received £" + trojanResult.getAmount());
+			logToUser(userData.getAuth().getUsername(), "collect|Trojan successful, received £" + trojanResult.getAmount()+"|"+userData.getMoney());
 			MoneyData moneyData = new MoneyData();
 			moneyData.setIp(userData.getIp());
 			moneyData.setDate(new Date());
@@ -881,7 +881,9 @@ public class Crawl {
 				return scanResult;
 			}
 		}, String.class);
-
+		
+		//System.out.println(scanResult);
+		
 		String[] lines = scanResult.split("\n");
 		ScanData scanData = new ScanData();
 		scanData.setIp(ip);
@@ -891,16 +893,16 @@ public class Crawl {
 			try {
 				scanData.setUsername(
 						lines[1].replace("          [ + ] Username: ", "").replace("          [ - ] Username: ", ""));
-				scanData.setFirewall(Integer.valueOf(lines[2].replaceAll("[^0-9]", "")).intValue());
-				scanData.setAntivirus(Integer.valueOf(lines[3].replaceAll("[^0-9]", "")).intValue());
-				scanData.setScan(Integer.valueOf(lines[4].replaceAll("[^0-9]", "")).intValue());
-				scanData.setSdk(Integer.valueOf(lines[5].replaceAll("[^0-9]", "")).intValue());
-				scanData.setSpam(Integer.valueOf(lines[6].replaceAll("[^0-9]", "")).intValue());
-				scanData.setMoney(Integer.valueOf(lines[7].replaceAll("[^0-9]", "")).intValue());
+				scanData.setFirewall(parseScanInt(lines[2]));
+				scanData.setAntivirus(parseScanInt(lines[3]));
+				scanData.setScan(parseScanInt(lines[4]));
+				scanData.setSdk(parseScanInt(lines[5]));
+				scanData.setSpam(parseScanInt(lines[6]));
+				scanData.setMoney(parseScanInt(lines[7]));
 
 				scanData.setAnonymous(lines[9].contains(": YES"));
 
-				scanData.setSuccess(Integer.valueOf(lines[13].replaceAll("[^0-9]", "")).intValue());
+				scanData.setSuccess(parseScanInt(lines[13]));
 
 				scanData.setScore(generateScore(scanData));
 
@@ -914,6 +916,14 @@ public class Crawl {
 			scanData.setError(true);
 		}
 		return scanData;
+	}
+	private static int parseScanInt(String val) {
+		try {
+			return Integer.valueOf(val.replaceAll("[^0-9]", "")).intValue();
+		} catch (Exception e) {
+			return 0;
+		}
+		
 	}
 
 	private static int generateScore(ScanData scanData) {

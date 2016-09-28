@@ -66,8 +66,9 @@
 					ws.send("register|"+username);
 				} else if(data.startsWith("info") | data.startsWith("error") | data.startsWith("collect") | data.startsWith("package") | data.startsWith("upgrade")) {
 					console.log(data);
-					var key = data.substring(0,data.indexOf("|"));
-					var val = data.substring(data.indexOf("|")+1);
+					var splitData = data.split("|");
+					var key = splitData[0];
+					var val = splitData[1];
 					var d = new Date();
 					var m = parseInt(d.getMinutes());
 					if(m < 10) {
@@ -83,6 +84,12 @@
 						$(".log .inner .line:lt("+linesToRemove+")").remove();
 					}
 					$(".log .inner").append("<pre class=\"line\">"+t+" <span class=\"tag tag-default\">"+key + "</span> " + val + "</pre>")
+					
+					if(data.startsWith("collect")) {
+						var newMoney = splitData[2];
+						console.log(newMoney);
+						updateAndHighlight("money", newMoney);
+					}
 				} else if(data.startsWith("chat")) {
 					console.log(data);
 					var dataElements = data.split("|||");
