@@ -68,8 +68,8 @@ public class Crawl {
 	private static MongoCollection scans;
 	private static MongoCollection money;
 
-	private static boolean USE_DB = true;
-	private static boolean USE_CHAT = true;
+	private static boolean USE_DB = false;
+	private static boolean USE_CHAT = false;
 	
 	@SuppressWarnings("unchecked")
 	static RetryPolicy unirestRetryPolicy = new RetryPolicy().retryOn(UnirestException.class, JsonParseException.class)
@@ -825,7 +825,7 @@ public class Crawl {
 				}
 				
 
-				if (!scanData.isError() && scanData.getSuccess() >= 70) {
+				if (!scanData.isError() && scanData.getSuccess() >= 70 && scanData.getMoney() != 0) {
 					System.out.println("LOOKS LIKE A GOOD TARGET");
 					launchTrojan(target.getIp(), userData);
 				}
@@ -921,7 +921,7 @@ public class Crawl {
 		try {
 			return Integer.valueOf(val.replaceAll("[^0-9]", "")).intValue();
 		} catch (Exception e) {
-			return 0;
+			return -1;
 		}
 		
 	}
