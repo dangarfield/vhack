@@ -68,8 +68,8 @@ public class Crawl {
 	private static MongoCollection scans;
 	private static MongoCollection money;
 
-	private static boolean USE_DB = false;
-	private static boolean USE_CHAT = false;
+	private static boolean USE_DB = true;
+	private static boolean USE_CHAT = true;
 	
 	@SuppressWarnings("unchecked")
 	static RetryPolicy unirestRetryPolicy = new RetryPolicy().retryOn(UnirestException.class, JsonParseException.class)
