@@ -65,8 +65,10 @@
 					var username = $("h1").data("username");
 					ws.send("register|"+username);
 				} else if(data.startsWith("info") | data.startsWith("error") | data.startsWith("collect") | data.startsWith("package") | data.startsWith("upgrade")) {
-					var key = data.substring(0,data.indexOf("|"));
-					var val = data.substring(data.indexOf("|")+1);
+					console.log(data);
+					var splitData = data.split("|");
+					var key = splitData[0];
+					var val = splitData[1];
 					var d = new Date();
 					var m = parseInt(d.getMinutes());
 					if(m < 10) {
@@ -82,6 +84,67 @@
 						$(".log .inner .line:lt("+linesToRemove+")").remove();
 					}
 					$(".log .inner").append("<pre class=\"line\">"+t+" <span class=\"tag tag-default\">"+key + "</span> " + val + "</pre>")
+					
+					if(data.startsWith("collect")) {
+						var newMoney = splitData[2];
+						console.log(newMoney);
+						updateAndHighlight("money", newMoney);
+					}
+				} else if(data.startsWith("chat")) {
+					console.log(data);
+					var dataElements = data.split("|||");
+					
+					var line = "";
+					if(dataElements.length > 4) {
+						//alert(data);
+						var user = dataElements[1];
+						var msg = dataElements[2];
+						
+//						return scanData.getIp() + "|" +
+//						scanData.getFirewall() + "|" + 
+//						scanData.getAntivirus() + "|" + 
+//						scanData.getSdk() + "|" + 
+//						scanData.getSpam() + "|" + 
+//						scanData.getScan() + "|" + 
+//						scanData.getMoney() + "|" + 
+//						scanData.getSuccess() + "|" + 
+//						scanData.getLastScanned();
+						
+						var ip = dataElements[3];
+						var fw = dataElements[4];
+						var av = dataElements[5];
+						var sdk = dataElements[6];
+						var spam = dataElements[7];
+						var scan = dataElements[8];
+						var money = dataElements[9];
+						var suc = dataElements[10];
+						var date = dataElements[11];
+						
+						line = "<pre class=\"line\"><span class=\"tag tag-default\">"+user + "</span> " + msg + "<br/>";
+						line = line + "<span class=\"tag tag-success\">"+ip+"</span> ";
+						line = line + "<span class=\"tag tag-success\">FW: "+fw+"</span> ";
+						line = line + "<span class=\"tag tag-success\">AV: "+av+"</span> ";
+						line = line + "<span class=\"tag tag-success\">SDK: "+sdk+"</span> ";
+						line = line + "<span class=\"tag tag-success\">Spam: "+spam+"</span> ";
+						line = line + "<span class=\"tag tag-success\">Scan: "+scan+"</span> ";
+						line = line + "<span class=\"tag tag-success\">$ "+money+"</span> ";
+						line = line + "<span class=\"tag tag-success\">"+suc+"%</span> ";
+						line = line + "<span class=\"tag tag-success\">"+date+"</span>";
+						line = line + "<button type=\"button\" class=\"btn btn-primary btn-action\" data-action=\"/user/dangarfield/scan-"+ip+"\" disabled=\"\">SCAN</button>";
+						line = line + "<button type=\"button\" class=\"btn btn-primary btn-action\" data-action=\"/user/dangarfield/attack-"+ip+"\" disabled=\"\">ATTACK</button>";
+						line = line + "</pre>";
+					} else {
+						var user = dataElements[1];
+						var msg = dataElements[2];
+						line = "<pre class=\"line\"><span class=\"tag tag-default\">"+user + "</span> " + msg + "</pre>";
+					}
+					var linesToRemove = $(".chat .inner .line").length - 49;
+					if(linesToRemove > 0) {
+						$(".chat .inner .line:lt("+linesToRemove+")").remove();
+					}
+					$(".chat .inner").append(line);
+					
+					
 				} else if(data.startsWith("{")) {
 					var j = JSON.parse(data);
 //					console.log(j);
